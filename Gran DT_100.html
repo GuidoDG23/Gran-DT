@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gran DT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .badge { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; font-weight: 700; font-size: 12px; }
+        .badge-1 { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #0f172a; }
+        .badge-2 { background: linear-gradient(135deg, #c0c0c0, #9ca3af); color: #0f172a; }
+        .badge-3 { background: linear-gradient(135deg, #f97316, #ea580c); color: white; }
+        .badge-4 { background: #64748b; color: #e2e8f0; }
+        .badge-5 { background: #1e293b; color: #94a3b8; border: 1px solid #475569; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 to-slate-800 text-slate-100 min-h-screen">
+    <div id="app"></div>
+
+    <script>
+        const state = {
+            argentina: {
+                A: [
+                    { name: 'Joaco', pj: 1, pg: 0, pp: 0, pe: 0, pts: 193 },
+                    { name: 'Maurito', pj: 1, pg: 0, pp: 0, pe: 0, pts: 190 },
+                    { name: 'Karim', pj: 1, pg: 0, pp: 0, pe: 0, pts: 189 },
+                    { name: 'Gonza', pj: 1, pg: 0, pp: 0, pe: 0, pts: 187 },
+                    { name: 'Lucas.P', pj: 1, pg: 0, pp: 0, pe: 0, pts: 186 },
+                    { name: 'Lucho', pj: 1, pg: 0, pp: 0, pe: 0, pts: 163 },
+                    { name: 'Sebi', pj: 1, pg: 0, pp: 0, pe: 0, pts: 149 }
+                ],
+                B: [
+                    { name: 'Lucas', pj: 1, pg: 0, pp: 0, pe: 0, pts: 180 },
+                    { name: 'Agus', pj: 1, pg: 0, pp: 0, pe: 0, pts: 166 },
+                    { name: 'Queno', pj: 1, pg: 0, pp: 0, pe: 0, pts: 165 },
+                    { name: 'Dieguito', pj: 1, pg: 0, pp: 0, pe: 0, pts: 159 },
+                    { name: 'Guido', pj: 1, pg: 0, pp: 0, pe: 0, pts: 145 },
+                    { name: 'Berni', pj: 1, pg: 0, pp: 0, pe: 0, pts: 141 },
+                    { name: 'Luca', pj: 1, pg: 0, pp: 0, pe: 0, pts: 123 }
+                ]
+            },
+            libertadores: [
+                { name: 'Clasificado1', pj: 0, pg: 0, pp: 0, pe: 0, gf: 0, gc: 0 },
+                { name: 'Clasificado2', pj: 0, pg: 0, pp: 0, pe: 0, gf: 0, gc: 0 },
+                { name: 'Clasificado3', pj: 0, pg: 0, pp: 0, pe: 0, gf: 0, gc: 0 },
+                { name: 'Clasificado4', pj: 0, pg: 0, pp: 0, pe: 0, gf: 0, gc: 0 },
+                { name: 'Clasificado5', pj: 0, pg: 0, pp: 0, pe: 0, gf: 0, gc: 0 },
+                { name: 'Clasificado6', pj: 0, pg: 0, pp: 0, pe: 0, gf: 0, gc: 0 },
+                { name: 'Clasificado7', pj: 0, pg: 0, pp: 0, pe: 0, gf: 0, gc: 0 }
+            ],
+            sudamericana: [
+                { name: 'Clasificado8', pj: 0, pg: 0, pp: 0, pe: 0, gf: 0, gc: 0 },
+                { name: 'Clasificado9', pj: 0, pg: 0, pp: 0, pe: 0, gf: 0, gc: 0 },
+                { name: 'Clasificado10', pj: 0, pg: 0, pp: 0, pe: 0, gf: 0, gc: 0 },
+                { name: 'Clasificado11', pj: 0, pg: 0, pp: 0, pe: 0, gf: 0, gc: 0 },
+                { name: 'Clasificado12', pj: 0, pg: 0, pp: 0, pe: 0, gf: 0, gc: 0 },
+                { name: 'Clasificado13', pj: 0, pg: 0, pp: 0, pe: 0, gf: 0, gc: 0 },
+                { name: 'Clasificado14', pj: 0, pg: 0, pp: 0, pe: 0, gf: 0, gc: 0 }
+            ],
+            goleadores: {
+                'Lucho': { titular: 'Gabriel Avalos', suplente: 'Nicolas Fernandez', equipoT: 'independiente', equipoS: 'belgrano', golesT: 1, golesS: 0 },
+                'Guido': { titular: 'Cristian Tarragona', suplente: 'Gabriel Avalos', equipoT: 'union', equipoS: 'independiente', golesT: 3, golesS: 1 },
+                'Sebi': { titular: 'Nicolas Lopez', suplente: 'Rodrigo Auzmendi', equipoT: 'platense', equipoS: 'sanlorenzo', golesT: 0, golesS: 2 },
+                'Agus': { titular: 'David Romero', suplente: 'Gabriel Avalos', equipoT: 'tigre', equipoS: 'independiente', golesT: 0, golesS: 1 },
+                'Dieguito': { titular: 'Ignacio Russo', suplente: 'Guido Carrillo', equipoT: 'tigre', equipoS: 'estudiantes', golesT: 2, golesS: 0 },
+                'Queno': { titular: 'Florian Monzon', suplente: 'Yoshan Valois', equipoT: 'velez', equipoS: 'lanus', golesT: 0, golesS: 3 },
+                'Berni': { titular: 'Cristian Tarragona', suplente: 'Nicolas Fernandez', equipoT: 'union', equipoS: 'belgrano', golesT: 3, golesS: 0 },
+                'Joaco': { titular: 'Gaston Veron', suplente: 'Matko Milijevic', equipoT: 'argentinos', equipoS: 'racing', golesT: 2, golesS: 1 },
+                'Karim': { titular: 'Cristian Tarragona', suplente: 'Gabriel Avalos', equipoT: 'union', equipoS: 'independiente', golesT: 3, golesS: 1 },
+                'Lucas': { titular: 'Lucas Beltran', suplente: 'Rafael Borre', equipoT: 'river', equipoS: 'river', golesT: 0, golesS: 0 },
+                'Lucas.P': { titular: 'Angel Correa', suplente: 'Florian Monzon', equipoT: 'river', equipoS: 'velez', golesT: 2, golesS: 0 },
+                'Luca': { titular: 'Lucas Beltran', suplente: 'Jordy Caicedo', equipoT: 'river', equipoS: 'huracan', golesT: 0, golesS: 3 },
+                'Maurito': { titular: 'Jordy Caicedo', suplente: 'Gabriel Avalos', equipoT: 'huracan', equipoS: 'independiente', golesT: 3, golesS: 1 },
+                'Gonza': { titular: 'Lucas Passerini', suplente: 'Lucas Beltran', equipoT: 'belgrano', equipoS: 'river', golesT: 1, golesS: 0 }
+            },
+            equipos: {
+                'independiente': 'https://paladarnegro.net/escudoteca/argentina/primeradivision/png/independiente.png',
+                'belgrano': 'https://paladarnegro.net/escudoteca/argentina/primeradivision/png/belgrano.png',
+                'union': 'https://paladarnegro.net/escudoteca/argentina/primeradivision/png/union.png',
+                'platense': 'https://paladarnegro.net/escudoteca/argentina/primeradivision/png/platense.png',
+                'sanlorenzo': 'https://paladarnegro.net/escudoteca/argentina/primeradivision/png/sanlorenzo.png',
+                'tigre': 'https://paladarnegro.net/escudoteca/argentina/primeradivision/png/tigre.png',
+                'estudiantes': 'https://paladarnegro.net/escudoteca/argentina/primeradivision/png/estudiantes.png',
+                'velez': 'https://paladarnegro.net/escudoteca/argentina/primeradivision/png/velez.png',
+                'lanus': 'https://paladarnegro.net/escudoteca/argentina/primeradivision/png/lanus.png',
+                'argentinos': 'https://paladarnegro.net/escudoteca/argentina/primeradivision/png/argentinos.png',
+                'racing': 'https://paladarnegro.net/escudoteca/argentina/primeradivision/png/racing.png',
+                'river': 'https://paladarnegro.net/escudoteca/argentina/primeradivision/png/river.png',
+                'huracan': 'https://paladarnegro.net/escudoteca/argentina/primeradivision/png/huracan.png'
+            },
+            jugadores: {
+                'Lucho': 'activo',
+                'Guido': 'activo',
+                'Sebi': 'activo',
+                'Lucas.P': 'activo',
+                'Gonza': 'activo',
+                'Maurito': 'activo',
+                'Karim': 'activo',
+                'Joaco': 'activo',
+                'Agus': 'activo',
+                'Lucas': 'activo',
+                'Berni': 'activo',
+                'Queno': 'activo',
+                'Luca': 'activo',
+                'Dieguito': 'activo'
+            },
+            promedios: {
+                'Dieguito': 5.83,
+                'Agus': 6.00,
+                'Sebi': 6.58,
+                'Guido': 7.00,
+                'Lucho': 5.83,
+                'Lucas.P': 8.33,
+                'Joaco': 6.58,
+                'Queno': 7.92,
+                'Karim': 5.83,
+                'Lucas': 7.58,
+                'Maurito': 6.25,
+                'Gonza': 7.42,
+                'Berni': 3.83,
+                'Luca': 5.58
+            },
+            promedios_fecha2: {
+                'Karim': 9.92,
+                'Maurito': 9.58,
+                'Joaco': 9.50,
+                'Gonza': 8.17,
+                'Berni': 7.92,
+                'Agus': 7.83,
+                'Lucho': 7.75,
+                'Lucas': 7.42,
+                'Dieguito': 7.42,
+                'Lucas.P': 7.17,
+                'Sebi': 5.83,
+                'Queno': 5.83,
+                'Guido': 5.08,
+                'Luca': 4.67
+            },
+            promedios_fecha3: {
+                'Karim': 0.00,
+                'Maurito': 0.00,
+                'Joaco': 0.00,
+                'Gonza': 0.00,
+                'Berni': 0.00,
+                'Agus': 0.00,
+                'Lucho': 0.00,
+                'Lucas': 0.00,
+                'Dieguito': 0.00,
+                'Lucas.P': 0.00,
+                'Sebi': 0.00,
+                'Queno': 0.00,
+                'Guido': 0.00
+            },
+            medalleria: {
+                'f11': [
+                    { jugador: 'Guido', oros: 4, platas: 1, bronces: 1 },
+                    { jugador: 'Maurito', oros: 1, platas: 1, bronces: 1 },
+                    { jugador: 'Lucho', oros: 1, platas: 1, bronces: 0 },
+                    { jugador: 'Gonza', oros: 1, platas: 0, bronces: 0 },
+                    { jugador: 'Fede', oros: 1, platas: 0, bronces: 0 },
+                    { jugador: 'Sebi', oros: 0, platas: 2, bronces: 2 },
+                    { jugador: 'Agus', oros: 0, platas: 1, bronces: 2 },
+                    { jugador: 'Joaco', oros: 0, platas: 1, bronces: 0 },
+                    { jugador: 'Dieguito', oros: 0, platas: 0, bronces: 1 },
+                    { jugador: 'Lucas', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Karim', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Berni', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Luca', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Lucas.P', oros: 0, platas: 0, bronces: 0 }
+                ],
+                'f5': [
+                    { jugador: 'Sebi', oros: 1, platas: 2, bronces: 0 },
+                    { jugador: 'Agus', oros: 1, platas: 1, bronces: 1 },
+                    { jugador: 'Fede', oros: 1, platas: 0, bronces: 0 },
+                    { jugador: 'Luca', oros: 1, platas: 0, bronces: 0 },
+                    { jugador: 'Guido', oros: 1, platas: 0, bronces: 2 },
+                    { jugador: 'Lucho', oros: 0, platas: 1, bronces: 0 },
+                    { jugador: 'Joaco', oros: 0, platas: 0, bronces: 1 },
+                    { jugador: 'Dieguito', oros: 0, platas: 1, bronces: 0 },
+                    { jugador: 'Lucas', oros: 0, platas: 1, bronces: 0 },
+                    { jugador: 'Maurito', oros: 0, platas: 1, bronces: 0 },
+                    { jugador: 'Gonza', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Karim', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Berni', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Lucas.P', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Queno', oros: 0, platas: 0, bronces: 0 }
+                ],
+                'libertadores': [
+                    { jugador: 'Guido', oros: 1, platas: 2, bronces: 1 },
+                    { jugador: 'Lucho', oros: 1, platas: 0, bronces: 1 },
+                    { jugador: 'Gonza', oros: 1, platas: 0, bronces: 1 },
+                    { jugador: 'Agus', oros: 1, platas: 0, bronces: 0 },
+                    { jugador: 'Fede', oros: 1, platas: 0, bronces: 0 },
+                    { jugador: 'Maurito', oros: 0, platas: 2, bronces: 0 },
+                    { jugador: 'Joaco', oros: 0, platas: 1, bronces: 0 },
+                    { jugador: 'Sebi', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Dieguito', oros: 0, platas: 0, bronces: 1 },
+                    { jugador: 'Lucas', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Karim', oros: 0, platas: 0, bronces: 1 },
+                    { jugador: 'Berni', oros: 0, platas: 0, bronces: 0 }
+                ],
+                'sudamericana': [
+                    { jugador: 'Agus', oros: 1, platas: 0, bronces: 1 },
+                    { jugador: 'Karim', oros: 1, platas: 0, bronces: 0 },
+                    { jugador: 'Guido', oros: 1, platas: 0, bronces: 0 },
+                    { jugador: 'Sebi', oros: 0, platas: 2, bronces: 0 },
+                    { jugador: 'Queno', oros: 0, platas: 1, bronces: 0 },
+                    { jugador: 'Luca', oros: 0, platas: 0, bronces: 1 },
+                    { jugador: 'Maurito', oros: 0, platas: 0, bronces: 1 },
+                    { jugador: 'Dieguito', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Joaco', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Gonza', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Berni', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Lucas', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Lucas.P', oros: 0, platas: 0, bronces: 0 }
+                ],
+                'recopa': [
+                    { jugador: 'Lucho', oros: 1, platas: 0, bronces: 0 },
+                    { jugador: 'Agus', oros: 1, platas: 0, bronces: 0 },
+                    { jugador: 'Gonza', oros: 1, platas: 0, bronces: 0 },
+                    { jugador: 'Guido', oros: 0, platas: 2, bronces: 0 },
+                    { jugador: 'Karim', oros: 0, platas: 1, bronces: 0 }
+                ],
+                'argentina': [
+                    { jugador: 'Gonza', oros: 1, platas: 0, bronces: 0 },
+                    { jugador: 'Maurito', oros: 0, platas: 1, bronces: 0 },
+                    { jugador: 'Lucho', oros: 0, platas: 0, bronces: 1 }
+                ],
+                'termometro': [
+                    { jugador: 'Guido', oros: 0, platas: 4, bronces: 0 },
+                    { jugador: 'Joaco', oros: 0, platas: 4, bronces: 0 },
+                    { jugador: 'Lucho', oros: 0, platas: 2, bronces: 0 },
+                    { jugador: 'Sebi', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Agus', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Dieguito', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Berni', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Luca', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Lucas', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Gonza', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Karim', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Maurito', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Lucas.P', oros: 0, platas: 0, bronces: 0 },
+                    { jugador: 'Queno', oros: 0, platas: 0, bronces: 0 }
+                ]
+            },
+            logos: {
+                argentina: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAx4AAAXcCAYAAACsyli7AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAALiMA',
+                libertadores: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk',
+                sudamericana: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk'
+            },
+            mainTab: 'f11',
+            subTab: 'fecha1',
+            isLoggedIn: false,
+            resultados: {
+                'Karim': [37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                'Lucho': [19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                'Lucas.P': [19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                'Gonza': [17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                'Joaco': [14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                'Maurito': [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                'Sebi': [7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                'Agus': [36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                'Dieguito': [35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                'Lucas': [33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                'Queno': [30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                'Guido': [23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                'Berni': [19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                'Luca': [7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            }
+        };
+
+        function getPts(eq) { return eq.pg * 3 + eq.pp; }
+        function getDiff(eq) { return eq.gf - eq.gc; }
+        
+        function updatePuntajes() {
+            const todos = [...state.argentina.A, ...state.argentina.B];
+            todos.forEach(jugador => {
+                const puntajes = state.resultados[jugador.name] || [];
+                jugador.pj = puntajes.filter(p => p > 0).length;
+                jugador.pts = puntajes.reduce((sum, p) => sum + (parseInt(p) || 0), 0);
+            });
+        }
+        
+        function updateResultado(jugador, fecha, valor) {
+            if (!state.resultados[jugador]) {
+                state.resultados[jugador] = Array(13).fill(0);
+            }
+            state.resultados[jugador][fecha] = parseInt(valor) || 0;
+            updatePuntajes();
+            render();
+        }
+
+        function sortTeams(teams) {
+            return [...teams].sort((a, b) => {
+                // Si tiene 'pts' directo (Copa Argentina), usar ese
+                if (a.pts !== undefined && b.pts !== undefined) {
+                    return b.pts - a.pts;
+                }
+                // Si no, calcular desde pg y pp (otros torneos)
+                const ptsA = getPts(a), ptsB = getPts(b);
+                return ptsB - ptsA || getDiff(b) - getDiff(a) || b.gf - a.gf;
+            });
+        }
+
+        function getBadgeClass(i) {
+            const classes = ['badge-1', 'badge-2', 'badge-3', 'badge-4', 'badge-5'];
+            return classes[Math.min(i, 4)];
+        }
+
+        function renderTeamRow(team, pos) {
+            return `<div class="grid grid-cols-5 gap-2 p-2 border-b border-slate-700 text-sm">
+                <div class="badge ${getBadgeClass(pos)}">${pos + 1}</div>
+                <div class="text-slate-200">${team.name}</div>
+                <div class="text-center text-slate-400">${team.pj}</div>
+                <div class="text-center text-green-400 font-bold">${team.pts}</div>
+            </div>`;
+        }
+
+        function renderGrupo(teams, titulo, color = 'blue') {
+            const sorted = sortTeams(teams);
+            const colorClass = color === 'cyan' ? 'border-cyan-500 bg-cyan-500/10' : 'border-blue-500 bg-blue-500/10';
+            const colorText = color === 'cyan' ? 'text-cyan-400' : 'text-blue-400';
+            
+            let html = `<div class="border-2 ${colorClass} rounded-lg overflow-hidden">
+                <div class="bg-gradient-to-r ${color === 'cyan' ? 'from-teal-900' : 'from-blue-900'} to-slate-900 p-3 border-b ${color === 'cyan' ? 'border-cyan-500' : 'border-blue-500'}">
+                    <h3 class="${colorText} font-bold text-lg">${titulo}</h3>
+                    <p class="text-slate-400 text-xs">7 equipos</p>
+                </div>
+                <div class="grid grid-cols-5 gap-2 p-2 font-bold ${colorText} text-xs border-b ${color === 'cyan' ? 'border-cyan-500' : 'border-blue-500'} ${color === 'cyan' ? 'bg-cyan-500/5' : 'bg-blue-500/5'}">
+                    <div>#</div><div>Equipo</div><div class="text-center">PJ</div><div class="text-center">PTS</div>
+                </div>`;
+            
+            sorted.forEach((team, i) => {
+                html += renderTeamRow(team, i);
+            });
+            
+            html += '</div>';
+            return html;
+        }
+
+        function render() {
+            let html = `<div class="sticky top-0 z-50 bg-gradient-to-r from-slate-900 to-slate-800 border-b border-blue-500 p-4">
+                <h1 class="text-3xl font-black text-center text-white">🏆 Gran DT</h1>
+            </div>`;
+
+            // Tabs principales
+            html += `<div class="px-4 py-3 flex gap-2 flex-wrap border-b border-slate-700">
+                <button onclick="state.mainTab='f11'; state.subTab='fecha1'; render()" class="px-4 py-2 rounded ${state.mainTab === 'f11' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'} font-bold text-sm">⚽ F11</button>
+                <button onclick="state.mainTab='argentina'; state.subTab='grupos'; render()" class="px-4 py-2 rounded ${state.mainTab === 'argentina' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'} font-bold text-sm">🏆 Copa Argentina</button>
+                <button onclick="state.mainTab='libertadores'; state.subTab='grupos'; render()" class="px-4 py-2 rounded ${state.mainTab === 'libertadores' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'} font-bold text-sm">🏆 Copa Libertadores</button>
+                <button onclick="state.mainTab='sudamericana'; state.subTab='grupos'; render()" class="px-4 py-2 rounded ${state.mainTab === 'sudamericana' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'} font-bold text-sm">🏆 Copa Sudamericana</button>
+                <button onclick="state.mainTab='goleadores'; render()" class="px-4 py-2 rounded ${state.mainTab === 'goleadores' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'} font-bold text-sm">⚽ Goleadores</button>
+                <button onclick="state.mainTab='termometro'; state.subTab='fecha1'; render()" class="px-4 py-2 rounded ${state.mainTab === 'termometro' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'} font-bold text-sm">🌡️ Termometro</button>
+                <button onclick="state.mainTab='medallero'; state.subTab='f11'; render()" class="px-4 py-2 rounded ${state.mainTab === 'medallero' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'} font-bold text-sm">🏅 Medallero</button>
+            </div>`;
+
+            // Sub-tabs
+            if (state.mainTab === 'medallero') {
+                html += `<div class="px-4 py-2 flex gap-2 border-b border-slate-700 flex-wrap">
+                    <button onclick="state.subTab='f11'; render()" class="px-3 py-1 rounded text-xs ${state.subTab === 'f11' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'} font-bold">F11</button>
+                    <button onclick="state.subTab='f5'; render()" class="px-3 py-1 rounded text-xs ${state.subTab === 'f5' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'} font-bold">F5</button>
+                    <button onclick="state.subTab='libertadores'; render()" class="px-3 py-1 rounded text-xs ${state.subTab === 'libertadores' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'} font-bold">Copa Libertadores</button>
+                    <button onclick="state.subTab='sudamericana'; render()" class="px-3 py-1 rounded text-xs ${state.subTab === 'sudamericana' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'} font-bold">Copa Sudamericana</button>
+                    <button onclick="state.subTab='recopa'; render()" class="px-3 py-1 rounded text-xs ${state.subTab === 'recopa' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'} font-bold">Recopa Sudamericana</button>
+                    <button onclick="state.subTab='argentina'; render()" class="px-3 py-1 rounded text-xs ${state.subTab === 'argentina' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'} font-bold">Copa Argentina</button>
+                </div>`;
+            } else if (state.mainTab === 'f11') {
+                html += `<div class="px-4 py-2 flex gap-2 border-b border-slate-700 flex-wrap">`;
+                for (let i = 1; i <= 14; i++) {
+                    const isActive = state.subTab === `fecha${i}`;
+                    const btnClass = isActive ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300';
+                    html += `<button onclick="state.subTab='fecha${i}'; render()" class="${btnClass} px-3 py-1 rounded text-xs font-bold">Fecha ${i}</button>`;
+                }
+                html += `</div>`;
+            } else if (state.mainTab === 'termometro') {
+                html += `<div class="px-4 py-2 flex gap-2 border-b border-slate-700">
+                    <button onclick="state.subTab='fecha1'; render()" class="px-3 py-1 rounded text-xs ${state.subTab === 'fecha1' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'} font-bold">Fecha 1</button>
+                    <button onclick="state.subTab='fecha2'; render()" class="px-3 py-1 rounded text-xs ${state.subTab === 'fecha2' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'} font-bold">Fecha 2</button>
+                    <button onclick="state.subTab='fecha3'; render()" class="px-3 py-1 rounded text-xs ${state.subTab === 'fecha3' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'} font-bold">Fecha 3</button>
+                </div>`;
+            } else if (state.mainTab !== 'goleadores') {
+                html += `<div class="px-4 py-2 flex gap-2 border-b border-slate-700">
+                    <button onclick="state.subTab='grupos'; render()" class="px-3 py-1 rounded text-xs ${state.subTab === 'grupos' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'} font-bold">Grupos</button>
+                    <button onclick="state.subTab='resultados'; render()" class="px-3 py-1 rounded text-xs ${state.subTab === 'resultados' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'} font-bold">Resultados</button>
+                    <button onclick="state.subTab='bracket'; render()" class="px-3 py-1 rounded text-xs ${state.subTab === 'bracket' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'} font-bold">Cuadro Final</button>
+                </div>`;
+            }
+
+            // Contenido
+            html += `<div class="p-4 max-w-7xl mx-auto">`;
+
+            if (state.mainTab === 'argentina') {
+                if (state.subTab === 'grupos') {
+                    html += `<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        ${renderGrupo(state.argentina.A, 'GRUPO A')}
+                        ${renderGrupo(state.argentina.B, 'GRUPO B', 'cyan')}
+                    </div>
+                    <div class="mt-6 bg-slate-700/50 border border-slate-600 rounded p-4">
+                        <p class="text-sm font-bold text-slate-300 mb-2">Información</p>
+                        <div class="grid grid-cols-3 gap-4 text-sm text-slate-300">
+                            <div>🟢 <span class="text-yellow-400">1º-2º:</span> Cuartos</div>
+                            <div>🟡 <span class="text-orange-400">3º-6º:</span> Repesca</div>
+                            <div>❌ <span class="text-gray-400">7º:</span> Eliminado</div>
+                        </div>
+                    </div>`;
+                } else if (state.subTab === 'resultados') {
+                    if (!state.isLoggedIn) {
+                        html += `<div class="max-w-sm mx-auto bg-slate-800 border border-slate-600 rounded-lg p-8 text-center mt-12">
+                            <h2 class="text-2xl font-bold text-slate-200 mb-4">🔐 Acceso Restringido</h2>
+                            <input type="password" id="pwd" placeholder="Contraseña" class="w-full p-2 rounded bg-slate-700 border border-slate-600 text-slate-100 mb-4">
+                            <button onclick="if(document.getElementById('pwd').value === 'admin123') { state.isLoggedIn = true; render(); } else { alert('Incorrecta'); }" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded">Entrar</button>
+                        </div>`;
+                    } else {
+                        html += `<div class="bg-slate-800 border border-slate-600 rounded-lg p-6">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-2xl font-bold text-blue-400">📊 Carga de Puntajes - Copa Argentina</h2>
+                                <button onclick="state.isLoggedIn = false; render()" class="bg-red-600 px-4 py-2 rounded text-white font-bold text-sm">Cerrar sesión</button>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table style="width:100%; border-collapse: collapse; font-size: 12px;">
+                                    <thead>
+                                        <tr style="background: rgba(59, 130, 246, 0.2); border-bottom: 2px solid #3b82f6;">
+                                            <th style="padding: 10px; text-align: left; color: #60a5fa; font-weight: bold; border-right: 1px solid #475569; min-width: 100px;">Jugador</th>`;
+                        
+                        for (let i = 1; i <= 13; i++) {
+                            html += `<th style="padding: 8px; text-align: center; color: #60a5fa; font-weight: bold; border-right: 1px solid #475569; width: 60px;">F${i}</th>`;
+                        }
+                        
+                        html += `</tr></thead><tbody>`;
+                        
+                        const todosJugadores = [...state.argentina.A, ...state.argentina.B];
+                        todosJugadores.forEach((jugador, idx) => {
+                            const bgColor = idx % 2 === 0 ? 'rgba(15, 23, 42, 0.5)' : 'rgba(30, 41, 59, 0.8)';
+                            html += `<tr style="background: ${bgColor}; border-bottom: 1px solid #475569;">
+                                <td style="padding: 8px; color: #e2e8f0; border-right: 1px solid #475569; font-weight: bold;">${jugador.name}</td>`;
+                            
+                            const puntajes = state.resultados[jugador.name] || Array(13).fill(0);
+                            for (let fecha = 0; fecha < 13; fecha++) {
+                                const valor = puntajes[fecha] || 0;
+                                html += `<td style="padding: 4px; text-align: center; border-right: 1px solid #475569;">
+                                    <input type="number" min="0" value="${valor}" 
+                                        onchange="updateResultado('${jugador.name}', ${fecha}, this.value)"
+                                        style="width: 50px; padding: 4px; background: #334155; border: 1px solid #475569; color: #e2e8f0; text-align: center; border-radius: 4px;">
+                                </td>`;
+                            }
+                            
+                            html += `</tr>`;
+                        });
+                        
+                        html += `</tbody></table>
+                            </div>
+                        </div>`;
+                    }
+
+                } else if (state.subTab === 'bracket') {
+                    html += `<div class="bg-slate-800 border border-slate-600 rounded-lg p-6">
+                        <h3 class="text-blue-400 font-bold text-lg mb-4 text-center">FORMATO COPA ARGENTINA</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
+                            <div class="bg-blue-500/10 border-l-2 border-blue-500 p-3"><div class="text-blue-400 font-bold mb-2">GRUPOS</div><div class="text-slate-300">2 Grupos de 7<br/>Clasifican: 1º-2º<br/>Repesca: 3º-6º<br/>Eliminado: 7º</div></div>
+                            <div class="bg-orange-500/10 border-l-2 border-orange-500 p-3"><div class="text-orange-400 font-bold mb-2">REPESCA (IDA - VUELTA)</div><div class="text-slate-300">3ºA vs 6ºB<br/>4ºA vs 5ºB<br/>3ºB vs 6ºA<br/>4ºB vs 5ºA</div></div>
+                            <div class="bg-purple-500/10 border-l-2 border-purple-500 p-3"><div class="text-purple-400 font-bold mb-2">CUARTOS (IDA - VUELTA)</div><div class="text-slate-300">1º vs 8º<br/>2º vs 7º<br/>3º vs 6º<br/>4º vs 5º</div></div>
+                            <div class="bg-violet-500/10 border-l-2 border-violet-500 p-3"><div class="text-violet-400 font-bold mb-2">SEMIS (IDA - VUELTA)</div><div class="text-slate-300">SF1: 1º vs 4º<br/>SF2: 2º vs 3º</div></div>
+                            <div class="bg-green-500/10 border-l-2 border-green-500 p-3"><div class="text-green-400 font-bold mb-2">FINAL (IDA - VUELTA)</div><div class="text-slate-300">🏆 Final<br/>🥉 3º-4º</div></div>
+                        </div>
+                    </div>`;
+                }
+            } else if (state.mainTab === 'libertadores') {
+                if (state.subTab === 'grupos') {
+                    html += `${renderGrupo(state.libertadores, 'COPA LIBERTADORES')}
+                    <div class="mt-6 bg-slate-700/50 border border-slate-600 rounded p-4">
+                        <p class="text-sm font-bold text-slate-300 mb-2">Información</p>
+                        <div class="text-sm text-slate-300">
+                            <div>🏆 <span class="text-green-400">Clasifican 1º-4º</span> → Semifinal</div>
+                            <div>❌ <span class="text-gray-400">5º-7º:</span> Eliminados</div>
+                        </div>
+                    </div>`;
+                } else if (state.subTab === 'resultados') {
+                    if (!state.isLoggedIn) {
+                        html += `<div class="max-w-sm mx-auto bg-slate-800 border border-slate-600 rounded-lg p-8 text-center mt-12">
+                            <h2 class="text-2xl font-bold text-slate-200 mb-4">🔐 Acceso Restringido</h2>
+                            <input type="password" id="pwd" placeholder="Contraseña" class="w-full p-2 rounded bg-slate-700 border border-slate-600 text-slate-100 mb-4">
+                            <button onclick="if(document.getElementById('pwd').value === 'admin123') { state.isLoggedIn = true; render(); } else { alert('Incorrecta'); }" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded">Entrar</button>
+                        </div>`;
+                    } else {
+                        html += `<div class="text-center"><p class="text-slate-300 mb-4">✅ Sesión iniciada</p><button onclick="state.isLoggedIn = false; render()" class="bg-red-600 px-4 py-2 rounded text-white font-bold">Cerrar sesión</button></div>`;
+                    }
+                } else if (state.subTab === 'bracket') {
+                    html += `<div class="bg-slate-800 border border-slate-600 rounded-lg p-6">
+                        <h3 class="text-blue-400 font-bold text-lg mb-4 text-center">FORMATO COPA LIBERTADORES</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                            <div class="bg-blue-500/10 border-l-2 border-blue-500 p-3"><div class="text-blue-400 font-bold mb-2">GRUPOS</div><div class="text-slate-300">7 equipos<br/>Clasifican: 1º-4º<br/>Eliminan: 5º-7º</div></div>
+                            <div class="bg-orange-500/10 border-l-2 border-orange-500 p-3"><div class="text-orange-400 font-bold mb-2">SEMIFINAL (IDA - VUELTA)</div><div class="text-slate-300">1º vs 4º<br/>2º vs 3º</div></div>
+                            <div class="bg-green-500/10 border-l-2 border-green-500 p-3"><div class="text-green-400 font-bold mb-2">FINAL (IDA - VUELTA)</div><div class="text-slate-300">Ganador SF1<br/>vs<br/>Ganador SF2</div></div>
+                            <div class="bg-purple-500/10 border-l-2 border-purple-500 p-3"><div class="text-purple-400 font-bold mb-2">3º PUESTO (IDA - VUELTA)</div><div class="text-slate-300">Perdedor SF1<br/>vs<br/>Perdedor SF2</div></div>
+                        </div>
+                    </div>`;
+                }
+            } else if (state.mainTab === 'sudamericana') {
+                if (state.subTab === 'grupos') {
+                    html += `${renderGrupo(state.sudamericana, 'COPA SUDAMERICANA')}
+                    <div class="mt-6 bg-slate-700/50 border border-slate-600 rounded p-4">
+                        <p class="text-sm font-bold text-slate-300 mb-2">Información</p>
+                        <div class="text-sm text-slate-300">
+                            <div>🏆 <span class="text-green-400">Clasifican 1º-4º</span> → Semifinal</div>
+                            <div>❌ <span class="text-gray-400">5º-7º:</span> Eliminados</div>
+                        </div>
+                    </div>`;
+                } else if (state.subTab === 'resultados') {
+                    if (!state.isLoggedIn) {
+                        html += `<div class="max-w-sm mx-auto bg-slate-800 border border-slate-600 rounded-lg p-8 text-center mt-12">
+                            <h2 class="text-2xl font-bold text-slate-200 mb-4">🔐 Acceso Restringido</h2>
+                            <input type="password" id="pwd" placeholder="Contraseña" class="w-full p-2 rounded bg-slate-700 border border-slate-600 text-slate-100 mb-4">
+                            <button onclick="if(document.getElementById('pwd').value === 'admin123') { state.isLoggedIn = true; render(); } else { alert('Incorrecta'); }" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded">Entrar</button>
+                        </div>`;
+                    } else {
+                        html += `<div class="text-center"><p class="text-slate-300 mb-4">✅ Sesión iniciada</p><button onclick="state.isLoggedIn = false; render()" class="bg-red-600 px-4 py-2 rounded text-white font-bold">Cerrar sesión</button></div>`;
+                    }
+                } else if (state.subTab === 'bracket') {
+                    html += `<div class="bg-slate-800 border border-slate-600 rounded-lg p-6">
+                        <h3 class="text-blue-400 font-bold text-lg mb-4 text-center">FORMATO COPA SUDAMERICANA</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                            <div class="bg-blue-500/10 border-l-2 border-blue-500 p-3"><div class="text-blue-400 font-bold mb-2">GRUPOS</div><div class="text-slate-300">7 equipos<br/>Clasifican: 1º-4º<br/>Eliminan: 5º-7º</div></div>
+                            <div class="bg-orange-500/10 border-l-2 border-orange-500 p-3"><div class="text-orange-400 font-bold mb-2">SEMIFINAL (IDA - VUELTA)</div><div class="text-slate-300">1º vs 4º<br/>2º vs 3º</div></div>
+                            <div class="bg-green-500/10 border-l-2 border-green-500 p-3"><div class="text-green-400 font-bold mb-2">FINAL (IDA - VUELTA)</div><div class="text-slate-300">Ganador SF1<br/>vs<br/>Ganador SF2</div></div>
+                            <div class="bg-purple-500/10 border-l-2 border-purple-500 p-3"><div class="text-purple-400 font-bold mb-2">3º PUESTO (IDA - VUELTA)</div><div class="text-slate-300">Perdedor SF1<br/>vs<br/>Perdedor SF2</div></div>
+                        </div>
+                    </div>`;
+                }
+            } else if (state.mainTab === 'goleadores') {
+                const nombreEquipos = {
+                    'sanlorenzo': 'San Lorenzo'
+                };
+                
+                function getNombreEquipo(key) {
+                    return nombreEquipos[key] || (key.charAt(0).toUpperCase() + key.slice(1));
+                }
+                
+                html += `<div class="grid grid-cols-2 md:grid-cols-4 gap-3">`;
+                for (let player in state.goleadores) {
+                    const d = state.goleadores[player];
+                    const logoT = state.equipos[d.equipoT] || '';
+                    const logoS = state.equipos[d.equipoS] || '';
+                    const equipoT = getNombreEquipo(d.equipoT);
+                    const equipoS = getNombreEquipo(d.equipoS);
+                    
+                    html += `<div class="bg-slate-800 border border-slate-600 rounded-lg p-2">
+                        <div class="bg-blue-600 text-white font-bold text-center py-1 rounded mb-2 text-xs">${player}</div>
+                        
+                        <div class="text-blue-400 text-xs font-bold mb-1">Titular</div>
+                        <div class="flex gap-1 items-center mb-1 text-xs">
+                            <img src="${logoT}" alt="${d.equipoT}" style="width:22px;height:22px;border-radius:2px;object-fit:cover;flex-shrink:0;">
+                            <span class="text-slate-200 font-semibold truncate">${d.titular}</span>
+                            <span class="text-slate-500 text-xs">-</span>
+                            <span class="text-slate-200 text-xs">${equipoT}</span>
+                        </div>
+                        <div class="text-xs mb-2"><span class="inline-block bg-yellow-400 text-black px-2 py-1 rounded font-bold">${d.golesT}</span></div>
+                        
+                        <div class="text-slate-300 text-xs font-bold mb-1">Suplente</div>
+                        <div class="flex gap-1 items-center mb-1 text-xs">
+                            <img src="${logoS}" alt="${d.equipoS}" style="width:22px;height:22px;border-radius:2px;object-fit:cover;flex-shrink:0;">
+                            <span class="text-slate-200 font-semibold truncate">${d.suplente}</span>
+                            <span class="text-slate-500 text-xs">-</span>
+                            <span class="text-slate-200 text-xs">${equipoS}</span>
+                        </div>
+                        <div class="text-xs"><span class="inline-block bg-gray-400 text-black px-2 py-1 rounded font-bold">${d.golesS}</span></div>
+                    </div>`;
+                }
+                html += `</div>`;
+            } else if (state.mainTab === 'medallero') {
+                const torneos = {
+                    f11: { nombre: 'Campeonato F11', key: 'f11' },
+                    f5: { nombre: 'Campeonato F5', key: 'f5' },
+                    libertadores: { nombre: 'Copa Libertadores', key: 'libertadores' },
+                    sudamericana: { nombre: 'Copa Sudamericana', key: 'sudamericana' },
+                    recopa: { nombre: 'Recopa Sudamericana', key: 'recopa' },
+                    argentina: { nombre: 'Copa Argentina', key: 'argentina' }
+                };
+                
+                const torneo = torneos[state.subTab];
+                let datos = state.medalleria[state.subTab] || [];
+                
+                // Ordenar por oros (desc), platas (desc), bronces (desc)
+                datos = datos.sort((a, b) => {
+                    if (b.oros !== a.oros) return b.oros - a.oros;
+                    if (b.platas !== a.platas) return b.platas - a.platas;
+                    return b.bronces - a.bronces;
+                });
+                
+                html += `<div class="bg-slate-800 border border-slate-600 rounded-lg overflow-hidden">
+                    <div class="bg-gradient-to-r from-blue-900 to-slate-900 p-4 border-b border-slate-600">
+                        <h2 class="text-2xl font-bold text-blue-400">🏅 ${torneo.nombre}</h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table style="width:100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: rgba(59, 130, 246, 0.2); border-bottom: 2px solid #3b82f6;">
+                                    <th style="padding: 12px; text-align: left; color: #60a5fa; font-weight: bold; border-right: 1px solid #475569;">Jugador</th>
+                                    <th style="padding: 12px; text-align: center; color: #fbbf24; font-weight: bold; border-right: 1px solid #475569; width: 80px;">🥇</th>
+                                    <th style="padding: 12px; text-align: center; color: #c0c0c0; font-weight: bold; border-right: 1px solid #475569; width: 80px;">🥈</th>
+                                    <th style="padding: 12px; text-align: center; color: #f97316; font-weight: bold; width: 80px;">🥉</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+                
+                datos.forEach((row, idx) => {
+                    const bgColor = idx % 2 === 0 ? 'rgba(15, 23, 42, 0.5)' : 'rgba(30, 41, 59, 0.8)';
+                    html += `<tr style="background: ${bgColor}; border-bottom: 1px solid #475569;">
+                        <td style="padding: 10px 12px; color: #e2e8f0; border-right: 1px solid #475569;">${row.jugador}</td>
+                        <td style="padding: 10px 12px; text-align: center; color: #fbbf24; font-weight: bold; border-right: 1px solid #475569;">${row.oros}</td>
+                        <td style="padding: 10px 12px; text-align: center; color: #c0c0c0; font-weight: bold; border-right: 1px solid #475569;">${row.platas}</td>
+                        <td style="padding: 10px 12px; text-align: center; color: #f97316; font-weight: bold;">${row.bronces}</td>
+                    </tr>`;
+                });
+                
+                html += `</tbody></table></div></div>`;
+                        } else if (state.mainTab === 'f11') {
+                html += `<div class="bg-slate-800 border border-slate-600 rounded-lg overflow-hidden">
+                    <div class="bg-gradient-to-r from-blue-900 to-slate-900 p-4 border-b border-slate-600">
+                        <h2 class="text-2xl font-bold text-blue-400">⚽ F11</h2>
+                    </div>`;
+                
+                if (state.subTab === 'fecha1') {
+                    const fecha1 = [{"nombre": "Dieguito", "color": "#10b981", "equipos": [{"jugador": "Reinatti.J", "pts": 9, "escudo": "https://assets.footylogos.com/previews/newells-old-boys/newells-old-boys-logo-footylogos-320.webp"}, {"jugador": "Orihuela.R", "pts": 8, "escudo": "https://assets.footylogos.com/previews/sarmiento/sarmiento-logo-footylogos-320.webp"}, {"jugador": "Maidana.A", "pts": 4, "escudo": "https://assets.footylogos.com/previews/talleres/talleres-logo-footylogos-320.webp"}, {"jugador": "Cerato.G", "pts": 7, "escudo": "https://assets.footylogos.com/previews/instituto-cordoba/instituto-cordoba-logo-footylogos-320.webp"}, {"jugador": "Aranda.T", "pts": 6, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}, {"jugador": "Lescano.A \u00a9", "pts": 12, "escudo": "https://assets.footylogos.com/previews/argentinos-juniors/argentinos-juniors-logo-footylogos-320.webp"}, {"jugador": "Paredes.L", "pts": 5, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}, {"jugador": "Flores.L", "pts": 5, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}, {"jugador": "Valois.Y", "pts": 4, "escudo": "https://assets.footylogos.com/previews/lanus/lanus-logo-footylogos-320.webp"}, {"jugador": "Tarragona.C", "pts": 4, "escudo": "https://assets.footylogos.com/previews/union/union-logo-footylogos-320.webp"}, {"jugador": "Russo.I", "pts": 6, "escudo": "https://assets.footylogos.com/previews/tigre/tigre-logo-footylogos-320.webp"}], "total": 70}, {"nombre": "Agus", "color": "#3b82f6", "equipos": [{"jugador": "Marchiori.T", "pts": 5, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Lopez.L", "pts": 8, "escudo": "https://assets.footylogos.com/previews/belgrano/belgrano-logo-footylogos-320.webp"}, {"jugador": "Gomez.E", "pts": 6, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Palacios.T", "pts": 7, "escudo": "https://assets.footylogos.com/previews/estudiantes-de-la-plata/estudiantes-de-la-plata-logo-footylogos-320.webp"}, {"jugador": "Lanzini.M", "pts": 15, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Lopez.M.H", "pts": 6, "escudo": "https://assets.footylogos.com/previews/argentinos-juniors/argentinos-juniors-logo-footylogos-320.webp"}, {"jugador": "Mosqueria.J", "pts": 5, "escudo": "https://assets.footylogos.com/previews/union/union-logo-footylogos-320.webp"}, {"jugador": "Caicedo.J  \u00a9", "pts": 0, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Valois.Y", "pts": 4, "escudo": "https://assets.footylogos.com/previews/lanus/lanus-logo-footylogos-320.webp"}, {"jugador": "Mazzanti.W", "pts": 11, "escudo": "https://assets.footylogos.com/previews/newells-old-boys/newells-old-boys-logo-footylogos-320.webp"}, {"jugador": "Flores.L", "pts": 5, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}], "total": 72}, {"nombre": "Sebi", "color": "#a855f7", "equipos": [{"jugador": "Losada.N", "pts": 0, "escudo": "https://assets.footylogos.com/previews/lanus/lanus-logo-footylogos-320.webp"}, {"jugador": "Palacios.T", "pts": 7, "escudo": "https://assets.footylogos.com/previews/estudiantes-de-la-plata/estudiantes-de-la-plata-logo-footylogos-320.webp"}, {"jugador": "Otamendi.N", "pts": 9, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Silvero.T", "pts": 3, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Incognito", "pts": 6, "escudo": ""}, {"jugador": "Lanzini.M \u00a9", "pts": 22, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Luna.A", "pts": 5, "escudo": "https://assets.footylogos.com/previews/instituto-cordoba/instituto-cordoba-logo-footylogos-320.webp"}, {"jugador": "Caicedo.J", "pts": -2, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Modica.A", "pts": 20, "escudo": "https://assets.footylogos.com/previews/gimnasia-y-esgrima/gimnasia-y-esgrima-logo-footylogos-320.webp"}, {"jugador": "Almada.T", "pts": 5, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Valois.Y", "pts": 4, "escudo": "https://assets.footylogos.com/previews/lanus/lanus-logo-footylogos-320.webp"}], "total": 79}, {"nombre": "Guido", "color": "#ec4899", "equipos": [{"jugador": "Cambeses.F", "pts": 4, "escudo": "https://assets.footylogos.com/previews/racing-club/racing-club-logo-footylogos-320.webp"}, {"jugador": "Lopez.L", "pts": 8, "escudo": "https://assets.footylogos.com/previews/belgrano/belgrano-logo-footylogos-320.webp"}, {"jugador": "Blondel.L", "pts": 5, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Cerato.G", "pts": 7, "escudo": "https://assets.footylogos.com/previews/instituto-cordoba/instituto-cordoba-logo-footylogos-320.webp"}, {"jugador": "Lanzini.M", "pts": 15, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Incognito \u00a9", "pts": 12, "escudo": ""}, {"jugador": "Ascacibar.S", "pts": 4, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}, {"jugador": "Modica.A", "pts": 20, "escudo": "https://assets.footylogos.com/previews/gimnasia-y-esgrima/gimnasia-y-esgrima-logo-footylogos-320.webp"}, {"jugador": "Passerini.L", "pts": 6, "escudo": "https://assets.footylogos.com/previews/belgrano/belgrano-logo-footylogos-320.webp"}, {"jugador": "Almada.T", "pts": 5, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Caicedo.J", "pts": -2, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}], "total": 84}, {"nombre": "Lucho", "color": "#f59e0b", "equipos": [{"jugador": "Devecchi.J", "pts": 9, "escudo": "https://assets.footylogos.com/previews/san-lorenzo/san-lorenzo-logo-footylogos-320.webp"}, {"jugador": "Blondel.L", "pts": 5, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Cerato.G", "pts": 7, "escudo": "https://assets.footylogos.com/previews/instituto-cordoba/instituto-cordoba-logo-footylogos-320.webp"}, {"jugador": "Schott.A", "pts": 4, "escudo": "https://assets.footylogos.com/previews/talleres/talleres-logo-footylogos-320.webp"}, {"jugador": "Aranda.T", "pts": 6, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}, {"jugador": "Lescano.A", "pts": 6, "escudo": "https://assets.footylogos.com/previews/argentinos-juniors/argentinos-juniors-logo-footylogos-320.webp"}, {"jugador": "Incognito \u00a9", "pts": 22, "escudo": ""}, {"jugador": "Almada.T", "pts": 5, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Caicedo.J", "pts": -2, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Carrillo.G", "pts": 5, "escudo": "https://assets.footylogos.com/previews/estudiantes-de-la-plata/estudiantes-de-la-plata-logo-footylogos-320.webp"}, {"jugador": "Avalos.G", "pts": 3, "escudo": "https://assets.footylogos.com/previews/independiente/independiente-logo-footylogos-320.webp"}], "total": 70}, {"nombre": "Lucas.P", "color": "#06b6d4", "equipos": [{"jugador": "Cardozo.T", "pts": 9, "escudo": "https://assets.footylogos.com/previews/belgrano/belgrano-logo-footylogos-320.webp"}, {"jugador": "Montiel.G", "pts": 17, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Insua.R", "pts": 5, "escudo": "https://assets.footylogos.com/previews/barracas-central/barracas-central-logo-footylogos-320.webp"}, {"jugador": "Sosa.D", "pts": 7, "escudo": "https://assets.footylogos.com/previews/instituto-cordoba/instituto-cordoba-logo-footylogos-320.webp"}, {"jugador": "Guch.F", "pts": 18, "escudo": "https://assets.footylogos.com/previews/newells-old-boys/newells-old-boys-logo-footylogos-320.webp"}, {"jugador": "Tripichio.N", "pts": 5, "escudo": "https://assets.footylogos.com/previews/san-lorenzo/san-lorenzo-logo-footylogos-320.webp"}, {"jugador": "Lamendola.N", "pts": 6, "escudo": "https://assets.footylogos.com/previews/atletico-tucuman/atletico-tucuman-logo-footylogos-320.webp"}, {"jugador": "Modica.A", "pts": 20, "escudo": "https://assets.footylogos.com/previews/gimnasia-y-esgrima/gimnasia-y-esgrima-logo-footylogos-320.webp"}, {"jugador": "Caicedo.J", "pts": -2, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Godoy.D \u00a9", "pts": 10, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Flores.L", "pts": 5, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}], "total": 100}, {"nombre": "Joaco", "color": "#8b5cf6", "equipos": [{"jugador": "Cambeses.F", "pts": 4, "escudo": "https://assets.footylogos.com/previews/racing-club/racing-club-logo-footylogos-320.webp"}, {"jugador": "Martinez.M", "pts": 5, "escudo": "https://assets.footylogos.com/previews/racing-club/racing-club-logo-footylogos-320.webp"}, {"jugador": "Cerato.G", "pts": 7, "escudo": "https://assets.footylogos.com/previews/instituto-cordoba/instituto-cordoba-logo-footylogos-320.webp"}, {"jugador": "Galvan.I", "pts": 2, "escudo": "https://assets.footylogos.com/previews/atletico-tucuman/atletico-tucuman-logo-footylogos-320.webp"}, {"jugador": "Porra.T", "pts": 5, "escudo": "https://assets.footylogos.com/previews/barracas-central/barracas-central-logo-footylogos-320.webp"}, {"jugador": "Lanzini.M \u00a9", "pts": 22, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Incognito", "pts": 0, "escudo": ""}, {"jugador": "Lescano.A", "pts": 6, "escudo": "https://assets.footylogos.com/previews/argentinos-juniors/argentinos-juniors-logo-footylogos-320.webp"}, {"jugador": "Modica.A", "pts": 20, "escudo": "https://assets.footylogos.com/previews/gimnasia-y-esgrima/gimnasia-y-esgrima-logo-footylogos-320.webp"}, {"jugador": "Tarragona.C", "pts": 4, "escudo": "https://assets.footylogos.com/previews/union/union-logo-footylogos-320.webp"}, {"jugador": "Valois.Y", "pts": 4, "escudo": "https://assets.footylogos.com/previews/lanus/lanus-logo-footylogos-320.webp"}], "total": 79}, {"nombre": "Queno", "color": "#06b6d4", "equipos": [{"jugador": "Cambeses.F", "pts": 4, "escudo": "https://assets.footylogos.com/previews/racing-club/racing-club-logo-footylogos-320.webp"}, {"jugador": "Lopez.L", "pts": 8, "escudo": "https://assets.footylogos.com/previews/belgrano/belgrano-logo-footylogos-320.webp"}, {"jugador": "Marcich.S", "pts": 5, "escudo": "https://assets.footylogos.com/previews/lanus/lanus-logo-footylogos-320.webp"}, {"jugador": "Silvero.T", "pts": 3, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Aranda.T", "pts": 6, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}, {"jugador": "Lanzini.M \u00a9", "pts": 22, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Miljevic.M", "pts": 5, "escudo": "https://assets.footylogos.com/previews/racing-club/racing-club-logo-footylogos-320.webp"}, {"jugador": "Almada.T", "pts": 5, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Auzmendi.R", "pts": 13, "escudo": "https://assets.footylogos.com/previews/san-lorenzo/san-lorenzo-logo-footylogos-320.webp"}, {"jugador": "Modica.A", "pts": 20, "escudo": "https://assets.footylogos.com/previews/gimnasia-y-esgrima/gimnasia-y-esgrima-logo-footylogos-320.webp"}, {"jugador": "Valois.Y", "pts": 4, "escudo": "https://assets.footylogos.com/previews/lanus/lanus-logo-footylogos-320.webp"}], "total": 95}, {"nombre": "Karim", "color": "#ef4444", "equipos": [{"jugador": "Cardozo.T", "pts": 9, "escudo": "https://assets.footylogos.com/previews/belgrano/belgrano-logo-footylogos-320.webp"}, {"jugador": "Lopez.L", "pts": 8, "escudo": "https://assets.footylogos.com/previews/belgrano/belgrano-logo-footylogos-320.webp"}, {"jugador": "Osella.A", "pts": 5, "escudo": "https://assets.footylogos.com/previews/independiente-rivadavia/independiente-rivadavia-logo-footylogos-320.webp"}, {"jugador": "Alvarez.F", "pts": 6, "escudo": "https://assets.footylogos.com/previews/argentinos-juniors/argentinos-juniors-logo-footylogos-320.webp"}, {"jugador": "Lencioni.F", "pts": 2, "escudo": "https://assets.footylogos.com/previews/gimnasia-y-esgrima/gimnasia-y-esgrima-logo-footylogos-320.webp"}, {"jugador": "Luna.A", "pts": 5, "escudo": "https://assets.footylogos.com/previews/instituto-cordoba/instituto-cordoba-logo-footylogos-320.webp"}, {"jugador": "Palacios.J", "pts": 5, "escudo": "https://assets.footylogos.com/previews/union/union-logo-footylogos-320.webp"}, {"jugador": "Caicedo.J", "pts": -2, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Tarragona.C \u00a9", "pts": 8, "escudo": "https://assets.footylogos.com/previews/union/union-logo-footylogos-320.webp"}, {"jugador": "Incognito", "pts": 20, "escudo": ""}, {"jugador": "Valois.Y", "pts": 4, "escudo": "https://assets.footylogos.com/previews/lanus/lanus-logo-footylogos-320.webp"}], "total": 70}, {"nombre": "Lucas", "color": "#f59e0b", "equipos": [{"jugador": "Cardozo.T", "pts": 9, "escudo": "https://assets.footylogos.com/previews/belgrano/belgrano-logo-footylogos-320.webp"}, {"jugador": "Alvarez.F", "pts": 6, "escudo": "https://assets.footylogos.com/previews/argentinos-juniors/argentinos-juniors-logo-footylogos-320.webp"}, {"jugador": "Garay.M", "pts": 9, "escudo": "https://assets.footylogos.com/previews/tigre/tigre-logo-footylogos-320.webp"}, {"jugador": "Stemibach.A", "pts": 0, "escudo": "https://assets.footylogos.com/previews/gimnasia-y-esgrima-lp/gimnasia-y-esgrima-lp-logo-footylogos-320.webp"}, {"jugador": "Otamendi.N", "pts": 9, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Ascacibar.S", "pts": 4, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}, {"jugador": "Lanzini.M", "pts": 15, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Mosqueira.J", "pts": 5, "escudo": "https://assets.footylogos.com/previews/union/union-logo-footylogos-320.webp"}, {"jugador": "Russo.I", "pts": 6, "escudo": "https://assets.footylogos.com/previews/tigre/tigre-logo-footylogos-320.webp"}, {"jugador": "Correa.A \u00a9", "pts": 23, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Flores.L", "pts": 5, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}], "total": 91}, {"nombre": "Maurito", "color": "#ec4899", "equipos": [{"jugador": "Galindez.H", "pts": 2, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Montiel.G", "pts": 17, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Cannavo.E", "pts": 5, "escudo": "https://assets.footylogos.com/previews/racing-club/racing-club-logo-footylogos-320.webp"}, {"jugador": "Blondel.L", "pts": 5, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Lanzini.M", "pts": 15, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Cristaldo.F", "pts": 4, "escudo": "https://assets.footylogos.com/previews/talleres/talleres-logo-footylogos-320.webp"}, {"jugador": "Ascacibar.S", "pts": 4, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}, {"jugador": "Santos.M", "pts": 6, "escudo": "https://assets.footylogos.com/previews/central-cordoba-se/central-cordoba-se-logo-footylogos-320.webp"}, {"jugador": "Caicedo.J \u00a9", "pts": 0, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Merentiel.M", "pts": 12, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}, {"jugador": "Almada.T", "pts": 5, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}], "total": 75}, {"nombre": "Gonza", "color": "#6366f1", "equipos": [{"jugador": "Marchiori.T", "pts": 5, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Lopez.L", "pts": 8, "escudo": "https://assets.footylogos.com/previews/belgrano/belgrano-logo-footylogos-320.webp"}, {"jugador": "Insua.R", "pts": 5, "escudo": "https://assets.footylogos.com/previews/barracas-central/barracas-central-logo-footylogos-320.webp"}, {"jugador": "Izquierdoz.C", "pts": 5, "escudo": "https://assets.footylogos.com/previews/lanus/lanus-logo-footylogos-320.webp"}, {"jugador": "Lanzini.M", "pts": 15, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Miljevic.M", "pts": 5, "escudo": "https://assets.footylogos.com/previews/racing-club/racing-club-logo-footylogos-320.webp"}, {"jugador": "Tapado", "pts": 6, "escudo": ""}, {"jugador": "Ascacibar.S", "pts": 4, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}, {"jugador": "Almada.T \u00a9", "pts": 12, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Modica.A", "pts": 20, "escudo": "https://assets.footylogos.com/previews/gimnasia-y-esgrima/gimnasia-y-esgrima-logo-footylogos-320.webp"}, {"jugador": "Valois.Y", "pts": 4, "escudo": "https://assets.footylogos.com/previews/lanus/lanus-logo-footylogos-320.webp"}], "total": 89}, {"nombre": "Berni", "color": "#f87171", "equipos": [{"jugador": "Cambeses.F", "pts": 4, "escudo": "https://assets.footylogos.com/previews/racing-club/racing-club-logo-footylogos-320.webp"}, {"jugador": "Cannavo.E", "pts": 5, "escudo": "https://assets.footylogos.com/previews/racing-club/racing-club-logo-footylogos-320.webp"}, {"jugador": "Silvero.T", "pts": 3, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Blondel.L", "pts": 5, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Mavilla.J", "pts": 4, "escudo": "https://assets.footylogos.com/previews/sarmiento/sarmiento-logo-footylogos-320.webp"}, {"jugador": "Luna.A", "pts": 5, "escudo": "https://assets.footylogos.com/previews/instituto-cordoba/instituto-cordoba-logo-footylogos-320.webp"}, {"jugador": "Miljevic.M", "pts": 5, "escudo": "https://assets.footylogos.com/previews/racing-club/racing-club-logo-footylogos-320.webp"}, {"jugador": "Caicedo.J", "pts": -2, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Valois.Y \u00a9", "pts": 8, "escudo": "https://assets.footylogos.com/previews/lanus/lanus-logo-footylogos-320.webp"}, {"jugador": "Almada.T", "pts": 5, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Tarragona.C", "pts": 4, "escudo": "https://assets.footylogos.com/previews/union/union-logo-footylogos-320.webp"}], "total": 46}, {"nombre": "Luca", "color": "#60a5fa", "equipos": [{"jugador": "Marchiori.T", "pts": 4, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Montiel.G", "pts": 17, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Otamendi.N", "pts": 9, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Palacios.T", "pts": 7, "escudo": "https://assets.footylogos.com/previews/estudiantes-de-la-plata/estudiantes-de-la-plata-logo-footylogos-320.webp"}, {"jugador": "Incognito", "pts": 3, "escudo": ""}, {"jugador": "Aliendro.R", "pts": 6, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Moreno.A", "pts": 5, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Almada.T", "pts": 5, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Caicedo.J", "pts": -2, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Valois.Y \u00a9", "pts": 8, "escudo": "https://assets.footylogos.com/previews/lanus/lanus-logo-footylogos-320.webp"}, {"jugador": "Freitas.J", "pts": 5, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}], "total": 67}];
+                    
+                    html += `<div class="overflow-x-auto p-4">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">`;
+                    
+                    fecha1.forEach(jugador => {
+                        html += `<div style="border: 2px solid #475569; border-radius: 8px; overflow: hidden; background: rgba(15, 23, 42, 0.9);">
+                            <div style="background: #60a5fa; padding: 8px; text-align: center; color: white; font-weight: bold; font-size: 16px;">${jugador.nombre}</div>
+                            <div style="padding: 8px; font-size: 12px;">
+                                <div style="display: flex; justify-content: space-between; font-weight: bold; color: #cbd5e1; margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid #475569;">
+                                    <span>Esc</span>
+                                    <span>Jugador</span>
+                                    <span>Pts</span>
+                                </div>`;
+                        
+                        jugador.equipos.forEach(eq => {
+                            const ptsColor = eq.pts < 0 ? '#ef4444' : eq.pts === 0 ? '#94a3b8' : '#fbbf24';
+                            html += `<div style="display: flex; gap: 6px; align-items: center; margin: 4px 0; padding: 4px; border-radius: 4px; background: rgba(30, 41, 59, 0.6);">
+                                ${eq.escudo.startsWith('http') ? `<img src="${eq.escudo}" style="width: 20px; height: 20px; object-fit: contain; flex-shrink: 0;">` : `<div style="width: 20px; height: 20px; flex-shrink: 0; ${eq.style}"></div>`}
+                                <span style="flex: 1; color: #cbd5e1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 11px;">${eq.jugador}</span>
+                                <span style="color: ${ptsColor}; font-weight: bold; min-width: 20px; text-align: right;">${eq.pts}</span>
+                            </div>`;
+                        });
+                        
+                        html += `<div style="border-top: 2px solid #475569; padding-top: 6px; margin-top: 6px; text-align: center; color: #60a5fa; font-weight: bold; font-size: 14px;">
+                            TOTAL: ${jugador.total}
+                        </div>
+                        </div></div>`;
+                    });
+                    
+                    html += `</div></div>`;
+                } else if (state.subTab === 'fecha2') {
+                    const fecha2 = [{"nombre": "Dieguito", "color": "#10b981", "equipos": [{"jugador": "Devecchi J", "pts": 6, "escudo": "https://assets.footylogos.com/previews/san-lorenzo/san-lorenzo-logo-footylogos-320.webp"}, {"jugador": "Amor E", "pts": 7, "escudo": "https://assets.footylogos.com/previews/san-lorenzo/san-lorenzo-logo-footylogos-320.webp"}, {"jugador": "Maidana A", "pts": 3, "escudo": "https://assets.footylogos.com/previews/talleres/talleres-logo-footylogos-320.webp"}, {"jugador": "Cerato G", "pts": 7, "escudo": "https://assets.footylogos.com/previews/instituto-cordoba/instituto-cordoba-logo-footylogos-320.webp"}, {"jugador": "Barros Schelotto N", "pts": 4, "escudo": "https://assets.footylogos.com/previews/gimnasia-y-esgrima-lp/gimnasia-y-esgrima-lp-logo-footylogos-320.webp"}, {"jugador": "Lamendola N", "pts": 4, "escudo": "https://assets.footylogos.com/previews/atletico-tucuman/atletico-tucuman-logo-footylogos-320.webp"}, {"jugador": "Ascacibar S ©", "pts": 12, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}, {"jugador": "Auzmendi A", "pts": 10, "escudo": "https://assets.footylogos.com/previews/gimnasia-y-esgrima-lp/gimnasia-y-esgrima-lp-logo-footylogos-320.webp"}, {"jugador": "Flores L", "pts": 6, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}, {"jugador": "Tarragona C", "pts": 24, "escudo": "https://assets.footylogos.com/previews/union/union-logo-footylogos-320.webp"}, {"jugador": "Russo I", "pts": 6, "escudo": "https://assets.footylogos.com/previews/tigre/tigre-logo-footylogos-320.webp"}], "total": 89}, {"nombre": "Agus", "color": "#3b82f6", "equipos": [{"jugador": "Galindez H", "pts": 8, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Lomonaco K", "pts": 7, "escudo": "https://assets.footylogos.com/previews/independiente/independiente-logo-footylogos-320.webp"}, {"jugador": "Insua R", "pts": 4, "escudo": "https://assets.footylogos.com/previews/barracas-central/barracas-central-logo-footylogos-320.webp"}, {"jugador": "Blondel L", "pts": 7, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Guch F", "pts": 4, "escudo": "https://assets.footylogos.com/previews/newells-old-boys/newells-old-boys-logo-footylogos-320.webp"}, {"jugador": "Incognito", "pts": 6, "escudo": ""}, {"jugador": "Fernandez I", "pts": 6, "escudo": "https://assets.footylogos.com/previews/gimnasia-y-esgrima-lp/gimnasia-y-esgrima-lp-logo-footylogos-320.webp"}, {"jugador": "Avalos G", "pts": 4, "escudo": "https://assets.footylogos.com/previews/independiente/independiente-logo-footylogos-320.webp"}, {"jugador": "Rigoni E", "pts": 6, "escudo": "https://assets.footylogos.com/previews/belgrano/belgrano-logo-footylogos-320.webp"}, {"jugador": "Auzmendi A", "pts": 10, "escudo": "https://assets.footylogos.com/previews/gimnasia-y-esgrima-lp/gimnasia-y-esgrima-lp-logo-footylogos-320.webp"}, {"jugador": "Tarragona C ©", "pts": 32, "escudo": "https://assets.footylogos.com/previews/union/union-logo-footylogos-320.webp"}], "total": 94}, {"nombre": "Sebi", "color": "#a855f7", "equipos": [{"jugador": "Galindez H", "pts": 8, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Blondel L", "pts": 7, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Vallejo L", "pts": 7, "escudo": "https://assets.footylogos.com/previews/atletico-tucuman/atletico-tucuman-logo-footylogos-320.webp"}, {"jugador": "Lopez L", "pts": 5, "escudo": "https://assets.footylogos.com/previews/belgrano/belgrano-logo-footylogos-320.webp"}, {"jugador": "Maroni G", "pts": 4, "escudo": "https://assets.footylogos.com/previews/barracas-central/barracas-central-logo-footylogos-320.webp"}, {"jugador": "Incognito ©", "pts": 10, "escudo": ""}, {"jugador": "Mavilla J", "pts": 6, "escudo": "https://assets.footylogos.com/previews/sarmiento/sarmiento-logo-footylogos-320.webp"}, {"jugador": "Colazo A", "pts": 5, "escudo": "https://assets.footylogos.com/previews/gimnasia-y-esgrima-lp/gimnasia-y-esgrima-lp-logo-footylogos-320.webp"}, {"jugador": "Russo I", "pts": 6, "escudo": "https://assets.footylogos.com/previews/tigre/tigre-logo-footylogos-320.webp"}, {"jugador": "Mazzanti W", "pts": 8, "escudo": "https://assets.footylogos.com/previews/newells-old-boys/newells-old-boys-logo-footylogos-320.webp"}, {"jugador": "Avalos G", "pts": 4, "escudo": "https://assets.footylogos.com/previews/independiente/independiente-logo-footylogos-320.webp"}], "total": 70}, {"nombre": "Guido", "color": "#ec4899", "equipos": [{"jugador": "Reinatti j", "pts": 5, "escudo": "https://assets.footylogos.com/previews/newells-old-boys/newells-old-boys-logo-footylogos-320.webp"}, {"jugador": "Otamendi N", "pts": 6, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Insua R", "pts": 4, "escudo": "https://assets.footylogos.com/previews/barracas-central/barracas-central-logo-footylogos-320.webp"}, {"jugador": "Barrionuevo", "pts": 6, "escudo": "https://assets.footylogos.com/previews/tigre/tigre-logo-footylogos-320.webp"}, {"jugador": "Luna.A ©", "pts": 12, "escudo": "https://assets.footylogos.com/previews/instituto-cordoba/instituto-cordoba-logo-footylogos-320.webp"}, {"jugador": "Lopez Muñoz H", "pts": 5, "escudo": "https://assets.footylogos.com/previews/argentinos-juniors/argentinos-juniors-logo-footylogos-320.webp"}, {"jugador": "Guch F", "pts": 4, "escudo": "https://assets.footylogos.com/previews/newells-old-boys/newells-old-boys-logo-footylogos-320.webp"}, {"jugador": "Cuello A", "pts": 5, "escudo": "https://assets.footylogos.com/previews/san-lorenzo/san-lorenzo-logo-footylogos-320.webp"}, {"jugador": "Incognito", "pts": 6, "escudo": ""}, {"jugador": "Almada T", "pts": 4, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Avalos G", "pts": 4, "escudo": "https://assets.footylogos.com/previews/independiente/independiente-logo-footylogos-320.webp"}], "total": 61}, {"nombre": "Lucho", "color": "#f59e0b", "equipos": [{"jugador": "Devecchi J", "pts": 6, "escudo": "https://assets.footylogos.com/previews/san-lorenzo/san-lorenzo-logo-footylogos-320.webp"}, {"jugador": "Alvarez F", "pts": 6, "escudo": "https://assets.footylogos.com/previews/argentinos-juniors/argentinos-juniors-logo-footylogos-320.webp"}, {"jugador": "Cerato G", "pts": 7, "escudo": "https://assets.footylogos.com/previews/instituto-cordoba/instituto-cordoba-logo-footylogos-320.webp"}, {"jugador": "Insua R", "pts": 4, "escudo": "https://assets.footylogos.com/previews/barracas-central/barracas-central-logo-footylogos-320.webp"}, {"jugador": "Aranda T", "pts": 7, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}, {"jugador": "Di Maria A", "pts": 24, "escudo": "https://assets.footylogos.com/previews/rosario-central/rosario-central-logo-footylogos-320.webp"}, {"jugador": "Lanzini M", "pts": 15, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Almada T", "pts": 4, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Russo I", "pts": 6, "escudo": "https://assets.footylogos.com/previews/tigre/tigre-logo-footylogos-320.webp"}, {"jugador": "Montiel S ©", "pts": 8, "escudo": "https://assets.footylogos.com/previews/independiente/independiente-logo-footylogos-320.webp"}, {"jugador": "Pussetto I", "pts": 6, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}], "total": 93}, {"nombre": "Lucas.P", "color": "#06b6d4", "equipos": [{"jugador": "Reinatti J", "pts": 5, "escudo": "https://assets.footylogos.com/previews/newells-old-boys/newells-old-boys-logo-footylogos-320.webp"}, {"jugador": "Infante J", "pts": 7, "escudo": "https://assets.footylogos.com/previews/atletico-tucuman/atletico-tucuman-logo-footylogos-320.webp"}, {"jugador": "Insua R", "pts": 4, "escudo": "https://assets.footylogos.com/previews/barracas-central/barracas-central-logo-footylogos-320.webp"}, {"jugador": "Alvarez F", "pts": 5, "escudo": "https://assets.footylogos.com/previews/tigre/tigre-logo-footylogos-320.webp"}, {"jugador": "Guch F", "pts": 4, "escudo": "https://assets.footylogos.com/previews/newells-old-boys/newells-old-boys-logo-footylogos-320.webp"}, {"jugador": "Lamendola N", "pts": 4, "escudo": "https://assets.footylogos.com/previews/atletico-tucuman/atletico-tucuman-logo-footylogos-320.webp"}, {"jugador": "Aranda T", "pts": 7, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}, {"jugador": "Modica A", "pts": 29, "escudo": "https://assets.footylogos.com/previews/gimnasia-y-esgrima/gimnasia-y-esgrima-logo-footylogos-320.webp"}, {"jugador": "Bisanz J", "pts": 4, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Russo I ©", "pts": 12, "escudo": "https://assets.footylogos.com/previews/tigre/tigre-logo-footylogos-320.webp"}, {"jugador": "Incognito", "pts": 5, "escudo": ""}], "total": 86}, {"nombre": "Joaco", "color": "#8b5cf6", "equipos": [{"jugador": "Reinatti J", "pts": 5, "escudo": "https://assets.footylogos.com/previews/newells-old-boys/newells-old-boys-logo-footylogos-320.webp"}, {"jugador": "Martinez M", "pts": 6, "escudo": "https://assets.footylogos.com/previews/racing-club/racing-club-logo-footylogos-320.webp"}, {"jugador": "Insua R", "pts": 4, "escudo": "https://assets.footylogos.com/previews/barracas-central/barracas-central-logo-footylogos-320.webp"}, {"jugador": "Otamendi N", "pts": 6, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Lopez Muñoz H", "pts": 5, "escudo": "https://assets.footylogos.com/previews/argentinos-juniors/argentinos-juniors-logo-footylogos-320.webp"}, {"jugador": "Lanzini M", "pts": 15, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Luna A", "pts": 6, "escudo": "https://assets.footylogos.com/previews/instituto-cordoba/instituto-cordoba-logo-footylogos-320.webp"}, {"jugador": "Mavilla J", "pts": 6, "escudo": "https://assets.footylogos.com/previews/sarmiento/sarmiento-logo-footylogos-320.webp"}, {"jugador": "Modica A", "pts": 29, "escudo": "https://assets.footylogos.com/previews/gimnasia-y-esgrima/gimnasia-y-esgrima-logo-footylogos-320.webp"}, {"jugador": "Tarragona C", "pts": 24, "escudo": "https://assets.footylogos.com/previews/union/union-logo-footylogos-320.webp"}, {"jugador": "Incognito ©", "pts": 8, "escudo": ""}], "total": 114}, {"nombre": "Queno", "color": "#06b6d4", "equipos": [{"jugador": "Galindez H", "pts": 8, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Nervo M", "pts": 7, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Gianetti L", "pts": 5, "escudo": "https://assets.footylogos.com/previews/newells-old-boys/newells-old-boys-logo-footylogos-320.webp"}, {"jugador": "Lopez L", "pts": 5, "escudo": "https://assets.footylogos.com/previews/belgrano/belgrano-logo-footylogos-320.webp"}, {"jugador": "Aranda T ©", "pts": 14, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}, {"jugador": "Porra T", "pts": 5, "escudo": "https://assets.footylogos.com/previews/barracas-central/barracas-central-logo-footylogos-320.webp"}, {"jugador": "Gaitan N", "pts": 5, "escudo": "https://assets.footylogos.com/previews/aldosivi/aldosivi-logo-footylogos-320.webp"}, {"jugador": "Auzmendi R", "pts": 5, "escudo": "https://assets.footylogos.com/previews/san-lorenzo/san-lorenzo-logo-footylogos-320.webp"}, {"jugador": "Bisanz J", "pts": 4, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Marabel J", "pts": 6, "escudo": "https://assets.footylogos.com/previews/sarmiento/sarmiento-logo-footylogos-320.webp"}, {"jugador": "Russo I", "pts": 6, "escudo": "https://assets.footylogos.com/previews/tigre/tigre-logo-footylogos-320.webp"}], "total": 70}, {"nombre": "Karim", "color": "#ef4444", "equipos": [{"jugador": "Cardozo T", "pts": 4, "escudo": "https://assets.footylogos.com/previews/belgrano/belgrano-logo-footylogos-320.webp"}, {"jugador": "Lopez L", "pts": 5, "escudo": "https://assets.footylogos.com/previews/belgrano/belgrano-logo-footylogos-320.webp"}, {"jugador": "Alcarcon F", "pts": 7, "escudo": "https://assets.footylogos.com/previews/instituto-cordoba/instituto-cordoba-logo-footylogos-320.webp"}, {"jugador": "Jappert K", "pts": 3, "escudo": "https://assets.footylogos.com/previews/barracas-central/barracas-central-logo-footylogos-320.webp"}, {"jugador": "Incognito", "pts": 15, "escudo": ""}, {"jugador": "Luna A", "pts": 6, "escudo": "https://assets.footylogos.com/previews/instituto-cordoba/instituto-cordoba-logo-footylogos-320.webp"}, {"jugador": "Millan L", "pts": 6, "escudo": "https://assets.footylogos.com/previews/independiente/independiente-logo-footylogos-320.webp"}, {"jugador": "Russo I", "pts": 6, "escudo": "https://assets.footylogos.com/previews/tigre/tigre-logo-footylogos-320.webp"}, {"jugador": "Tarragona C", "pts": 24, "escudo": "https://assets.footylogos.com/previews/union/union-logo-footylogos-320.webp"}, {"jugador": "Modica A ©", "pts": 38, "escudo": "https://assets.footylogos.com/previews/gimnasia-y-esgrima/gimnasia-y-esgrima-logo-footylogos-320.webp"}, {"jugador": "Auzmendi R", "pts": 5, "escudo": "https://assets.footylogos.com/previews/san-lorenzo/san-lorenzo-logo-footylogos-320.webp"}], "total": 119}, {"nombre": "Lucas", "color": "#f59e0b", "equipos": [{"jugador": "Cardozo T", "pts": 4, "escudo": "https://assets.footylogos.com/previews/belgrano/belgrano-logo-footylogos-320.webp"}, {"jugador": "Alvarez F", "pts": 6, "escudo": "https://assets.footylogos.com/previews/argentinos-juniors/argentinos-juniors-logo-footylogos-320.webp"}, {"jugador": "Barros Schelotto B", "pts": 5, "escudo": "https://assets.footylogos.com/previews/gimnasia-y-esgrima-lp/gimnasia-y-esgrima-lp-logo-footylogos-320.webp"}, {"jugador": "Gonzalez G", "pts": 6, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Otamendi N", "pts": 6, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Ascaconar S", "pts": 6, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}, {"jugador": "Lanzini M", "pts": 15, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Delgado M", "pts": 7, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}, {"jugador": "Almada T", "pts": 4, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Russo I", "pts": 6, "escudo": "https://assets.footylogos.com/previews/tigre/tigre-logo-footylogos-320.webp"}, {"jugador": "Correa A ©", "pts": 24, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}], "total": 89}, {"nombre": "Maurito", "color": "#ec4899", "equipos": [{"jugador": "Devecchi J", "pts": 6, "escudo": "https://assets.footylogos.com/previews/san-lorenzo/san-lorenzo-logo-footylogos-320.webp"}, {"jugador": "Arboleda D", "pts": 8, "escudo": "https://assets.footylogos.com/previews/banfield/banfield-logo-footylogos-320.webp"}, {"jugador": "Sosa D", "pts": 7, "escudo": "https://assets.footylogos.com/previews/instituto-cordoba/instituto-cordoba-logo-footylogos-320.webp"}, {"jugador": "Blondel L", "pts": 7, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Di Maria A", "pts": 24, "escudo": "https://assets.footylogos.com/previews/rosario-central/rosario-central-logo-footylogos-320.webp"}, {"jugador": "Luna A ©", "pts": 12, "escudo": "https://assets.footylogos.com/previews/instituto-cordoba/instituto-cordoba-logo-footylogos-320.webp"}, {"jugador": "Ascacibar S", "pts": 6, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}, {"jugador": "Avalos G", "pts": 4, "escudo": "https://assets.footylogos.com/previews/independiente/independiente-logo-footylogos-320.webp"}, {"jugador": "Cuello A", "pts": 5, "escudo": "https://assets.footylogos.com/previews/san-lorenzo/san-lorenzo-logo-footylogos-320.webp"}, {"jugador": "Merentiel M", "pts": 12, "escudo": "https://assets.footylogos.com/previews/boca-juniors/boca-juniors-logo-footylogos-320.webp"}, {"jugador": "Tarragona C", "pts": 24, "escudo": "https://assets.footylogos.com/previews/union/union-logo-footylogos-320.webp"}], "total": 115}, {"nombre": "Gonza", "color": "#6366f1", "equipos": [{"jugador": "Galindez H", "pts": 8, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Blondel L", "pts": 7, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Alvarez F", "pts": 6, "escudo": "https://assets.footylogos.com/previews/argentinos-juniors/argentinos-juniors-logo-footylogos-320.webp"}, {"jugador": "Ferreira C", "pts": 7, "escudo": "https://assets.footylogos.com/previews/atletico-tucuman/atletico-tucuman-logo-footylogos-320.webp"}, {"jugador": "Maroni G", "pts": 4, "escudo": "https://assets.footylogos.com/previews/barracas-central/barracas-central-logo-footylogos-320.webp"}, {"jugador": "Lanzini M", "pts": 15, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Guch F", "pts": 4, "escudo": "https://assets.footylogos.com/previews/newells-old-boys/newells-old-boys-logo-footylogos-320.webp"}, {"jugador": "Incognito", "pts": 6, "escudo": ""}, {"jugador": "Auzmendi R", "pts": 5, "escudo": "https://assets.footylogos.com/previews/san-lorenzo/san-lorenzo-logo-footylogos-320.webp"}, {"jugador": "Marabel J ©", "pts": 12, "escudo": "https://assets.footylogos.com/previews/sarmiento/sarmiento-logo-footylogos-320.webp"}, {"jugador": "Tarragona C", "pts": 24, "escudo": "https://assets.footylogos.com/previews/union/union-logo-footylogos-320.webp"}], "total": 98}, {"nombre": "Berni", "color": "#f87171", "equipos": [{"jugador": "Cardozo T", "pts": 4, "escudo": "https://assets.footylogos.com/previews/belgrano/belgrano-logo-footylogos-320.webp"}, {"jugador": "Blondel L", "pts": 7, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Lopez L", "pts": 5, "escudo": "https://assets.footylogos.com/previews/belgrano/belgrano-logo-footylogos-320.webp"}, {"jugador": "Jappert K", "pts": 3, "escudo": "https://assets.footylogos.com/previews/barracas-central/barracas-central-logo-footylogos-320.webp"}, {"jugador": "Mavilla J", "pts": 6, "escudo": "https://assets.footylogos.com/previews/sarmiento/sarmiento-logo-footylogos-320.webp"}, {"jugador": "Lanzini M", "pts": 15, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Lopez Muñoz H", "pts": 5, "escudo": "https://assets.footylogos.com/previews/argentinos-juniors/argentinos-juniors-logo-footylogos-320.webp"}, {"jugador": "Russo I", "pts": 6, "escudo": "https://assets.footylogos.com/previews/tigre/tigre-logo-footylogos-320.webp"}, {"jugador": "Almada T", "pts": 4, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Tarragona C ©", "pts": 32, "escudo": "https://assets.footylogos.com/previews/union/union-logo-footylogos-320.webp"}, {"jugador": "Mazzanti W", "pts": 8, "escudo": "https://assets.footylogos.com/previews/newells-old-boys/newells-old-boys-logo-footylogos-320.webp"}], "total": 95}, {"nombre": "Luca", "color": "#60a5fa", "equipos": [{"jugador": "Marchiori T", "pts": 3, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Blondel L", "pts": 7, "escudo": "https://assets.footylogos.com/previews/huracan/huracan-logo-footylogos-320.webp"}, {"jugador": "Otamendi N", "pts": 6, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Palacios T", "pts": 5, "escudo": "https://assets.footylogos.com/previews/estudiantes-de-la-plata/estudiantes-de-la-plata-logo-footylogos-320.webp"}, {"jugador": "Incognito", "pts": 0, "escudo": ""}, {"jugador": "Aliendro R", "pts": 7, "escudo": "https://assets.footylogos.com/previews/velez-sarsfield/velez-sarsfield-logo-footylogos-320.webp"}, {"jugador": "Moreno A", "pts": 4, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Almada T", "pts": 4, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}, {"jugador": "Auzmendi R", "pts": 5, "escudo": "https://assets.footylogos.com/previews/san-lorenzo/san-lorenzo-logo-footylogos-320.webp"}, {"jugador": "Valois Y ©", "pts": 8, "escudo": "https://assets.footylogos.com/previews/lanus/lanus-logo-footylogos-320.webp"}, {"jugador": "Freitas J", "pts": 7, "escudo": "https://assets.footylogos.com/previews/river-plate/river-plate-logo-footylogos-320.webp"}], "total": 56}];
+                    
+                    html += `<div class="overflow-x-auto p-4">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">`;
+                    
+                    fecha2.forEach(jugador => {
+                        html += `<div style="border: 2px solid #475569; border-radius: 8px; overflow: hidden; background: rgba(15, 23, 42, 0.9);">
+                            <div style="background: #60a5fa; padding: 8px; text-align: center; color: white; font-weight: bold; font-size: 16px;">${jugador.nombre}</div>
+                            <div style="padding: 8px; font-size: 12px;">
+                                <div style="display: flex; justify-content: space-between; font-weight: bold; color: #cbd5e1; margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid #475569;">
+                                    <span>Esc</span>
+                                    <span>Jugador</span>
+                                    <span>Pts</span>
+                                </div>`;
+                        
+                        jugador.equipos.forEach(eq => {
+                            const ptsColor = eq.pts < 0 ? '#ef4444' : eq.pts === 0 ? '#94a3b8' : '#fbbf24';
+                            html += `<div style="display: flex; gap: 6px; align-items: center; margin: 4px 0; padding: 4px; border-radius: 4px; background: rgba(30, 41, 59, 0.6);">
+                                ${eq.escudo.startsWith('http') ? `<img src="${eq.escudo}" style="width: 20px; height: 20px; object-fit: contain; flex-shrink: 0;">` : `<div style="width: 20px; height: 20px; flex-shrink: 0; ${eq.style}"></div>`}
+                                <span style="flex: 1; color: #cbd5e1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 11px;">${eq.jugador}</span>
+                                <span style="color: ${ptsColor}; font-weight: bold; min-width: 20px; text-align: right;">${eq.pts}</span>
+                            </div>`;
+                        });
+                        
+                        html += `<div style="border-top: 2px solid #475569; padding-top: 6px; margin-top: 6px; text-align: center; color: #60a5fa; font-weight: bold; font-size: 14px;">
+                            TOTAL: ${jugador.total}
+                        </div>
+                        </div>`;
+                    });
+                    
+                    html += `</div></div>`;
+                } else {
+                    html += `<div class="p-6 text-center text-slate-300">
+                        <p class="text-lg">⚽ F11 - ${state.subTab.replace('fecha', 'Fecha ')}</p>
+                        <p class="text-sm mt-2">Próximamente: Alineaciones y estadísticas</p>
+                    </div>`;
+                }
+                
+                html += `</div>`;} else if (state.mainTab === 'termometro') {
+                if (state.subTab === 'fecha1') {
+                    // Encontrar el menor promedio
+                    const promedios = Object.entries(state.promedios);
+                    const menorPromedio = Math.min(...promedios.map(p => p[1]));
+                    
+                    // Ordenar por promedio descendente
+                    promedios.sort((a, b) => b[1] - a[1]);
+                    
+                    html += `<div class="bg-slate-800 border border-slate-600 rounded-lg overflow-hidden">
+                        <div class="bg-gradient-to-r from-blue-900 to-slate-900 p-4 border-b border-slate-600">
+                            <h2 class="text-2xl font-bold text-blue-400">🌡️ Termómetro - Fecha 1 - Promedios</h2>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table style="width:100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background: rgba(59, 130, 246, 0.2); border-bottom: 2px solid #3b82f6;">
+                                        <th style="padding: 12px; text-align: left; color: #60a5fa; font-weight: bold; border-right: 1px solid #475569;">Jugador</th>
+                                        <th style="padding: 12px; text-align: center; color: #60a5fa; font-weight: bold; width: 120px;">Promedio</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
+                    
+                    promedios.forEach((item, idx) => {
+                        const [jugador, promedio] = item;
+                        const isMinimo = promedio === menorPromedio;
+                        const bgColor = isMinimo ? 'rgba(239, 68, 68, 0.3)' : (idx % 2 === 0 ? 'rgba(15, 23, 42, 0.5)' : 'rgba(30, 41, 59, 0.8)');
+                        const textColor = isMinimo ? 'text-red-400 font-bold' : 'text-slate-200';
+                        
+                        html += `<tr style="background: ${bgColor}; border-bottom: 1px solid #475569;">
+                            <td style="padding: 12px; color: ${textColor}; border-right: 1px solid #475569;">${jugador}</td>
+                            <td style="padding: 12px; text-align: center; color: ${textColor}; font-weight: bold;">${promedio.toFixed(2)}</td>
+                        </tr>`;
+                    });
+                    
+                    html += `</tbody></table>
+                        </div>
+                    </div>`;
+                } else if (state.subTab === 'fecha2') {
+                    // Excluir a Berni y mostrar los 13 restantes con promedios en 0
+                    const promedios = Object.entries(state.promedios_fecha2)
+                        .filter(item => item[0] !== 'Berni'); // Excluir a Berni
+                    
+                    const menorPromedio = Math.min(...promedios.map(p => p[1]));
+                    
+                    // Ordenar por promedio descendente
+                    promedios.sort((a, b) => b[1] - a[1]);
+                    
+                    html += `<div class="bg-slate-800 border border-slate-600 rounded-lg overflow-hidden">
+                        <div class="bg-gradient-to-r from-blue-900 to-slate-900 p-4 border-b border-slate-600">
+                            <h2 class="text-2xl font-bold text-blue-400">🌡️ Termómetro - Fecha 2 - Promedios</h2>
+                            <p style="color: #cbd5e1; font-size: 12px; margin-top: 4px;">Eliminado: Berni (Quedó en último lugar) | Fecha aún no iniciada</p>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table style="width:100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background: rgba(59, 130, 246, 0.2); border-bottom: 2px solid #3b82f6;">
+                                        <th style="padding: 12px; text-align: left; color: #60a5fa; font-weight: bold; border-right: 1px solid #475569;">Jugador</th>
+                                        <th style="padding: 12px; text-align: center; color: #60a5fa; font-weight: bold; width: 120px;">Promedio</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
+                    
+                    promedios.forEach((item, idx) => {
+                        const [jugador, promedio] = item;
+                        const isMinimo = promedio === menorPromedio;
+                        const bgColor = isMinimo ? 'rgba(239, 68, 68, 0.3)' : (idx % 2 === 0 ? 'rgba(15, 23, 42, 0.5)' : 'rgba(30, 41, 59, 0.8)');
+                        const textColor = isMinimo ? 'text-red-400 font-bold' : 'text-slate-200';
+                        
+                        html += `<tr style="background: ${bgColor}; border-bottom: 1px solid #475569;">
+                            <td style="padding: 12px; color: ${textColor}; border-right: 1px solid #475569;">${jugador}</td>
+                            <td style="padding: 12px; text-align: center; color: ${textColor}; font-weight: bold;">${promedio.toFixed(2)}</td>
+                        </tr>`;
+                    });
+                    
+                    html += `</tbody></table>
+                        </div>
+                    </div>`;
+                } else if (state.subTab === 'fecha3') {
+                    const promedios = Object.entries(state.promedios_fecha3);
+                    
+                    // Ordenar por promedio descendente
+                    promedios.sort((a, b) => b[1] - a[1]);
+                    
+                    html += `<div class="bg-slate-800 border border-slate-600 rounded-lg overflow-hidden">
+                        <div class="bg-gradient-to-r from-blue-900 to-slate-900 p-4 border-b border-slate-600">
+                            <h2 class="text-2xl font-bold text-blue-400">🌡️ Termómetro - Fecha 3 - Promedios</h2>
+                            <p style="color: #cbd5e1; font-size: 12px; margin-top: 4px;">Eliminado: Luca (Quedó en último lugar) | Fecha aún no iniciada</p>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table style="width:100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background: rgba(59, 130, 246, 0.2); border-bottom: 2px solid #3b82f6;">
+                                        <th style="padding: 12px; text-align: left; color: #60a5fa; font-weight: bold; border-right: 1px solid #475569;">Jugador</th>
+                                        <th style="padding: 12px; text-align: center; color: #60a5fa; font-weight: bold; width: 120px;">Promedio</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
+                    
+                    promedios.forEach((item, idx) => {
+                        const [jugador, promedio] = item;
+                        const bgColor = idx % 2 === 0 ? 'rgba(15, 23, 42, 0.5)' : 'rgba(30, 41, 59, 0.8)';
+                        
+                        html += `<tr style="background: ${bgColor}; border-bottom: 1px solid #475569;">
+                            <td style="padding: 12px; color: text-slate-200; border-right: 1px solid #475569;">${jugador}</td>
+                            <td style="padding: 12px; text-align: center; color: #cbd5e1; font-weight: bold;">${promedio.toFixed(2)}</td>
+                        </tr>`;
+                    });
+                    
+                    html += `</tbody></table>
+                        </div>
+                    </div>`;
+                }
+            }
+
+            html += `</div>`;
+            document.getElementById('app').innerHTML = html;
+        }
+
+        render();
+    </script>
+</body>
+</html>
